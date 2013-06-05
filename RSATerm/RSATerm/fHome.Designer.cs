@@ -31,16 +31,13 @@ namespace RSATerm
         private void InitializeComponent()
         {
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.gbxMsgIn = new System.Windows.Forms.GroupBox();
-            this.lbReceiveMsgs = new System.Windows.Forms.ListBox();
             this.gbxMsgOut = new System.Windows.Forms.GroupBox();
             this.btnSend = new System.Windows.Forms.Button();
             this.tbTransmitMsg = new System.Windows.Forms.TextBox();
-            this.lbSentMsgs = new System.Windows.Forms.ListBox();
             this.gbxConfig = new System.Windows.Forms.GroupBox();
             this.btnConfigRSA = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
-            this.gbxMsgIn.SuspendLayout();
+            this.rtbMessages = new System.Windows.Forms.RichTextBox();
             this.gbxMsgOut.SuspendLayout();
             this.gbxConfig.SuspendLayout();
             this.SuspendLayout();
@@ -49,54 +46,31 @@ namespace RSATerm
             // 
             this.statusStrip1.Location = new System.Drawing.Point(0, 263);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(734, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(444, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "Status";
-            // 
-            // gbxMsgIn
-            // 
-            this.gbxMsgIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.gbxMsgIn.Controls.Add(this.lbReceiveMsgs);
-            this.gbxMsgIn.Location = new System.Drawing.Point(4, 3);
-            this.gbxMsgIn.MinimumSize = new System.Drawing.Size(300, 255);
-            this.gbxMsgIn.Name = "gbxMsgIn";
-            this.gbxMsgIn.Size = new System.Drawing.Size(300, 255);
-            this.gbxMsgIn.TabIndex = 1;
-            this.gbxMsgIn.TabStop = false;
-            this.gbxMsgIn.Text = "Messages In:";
-            // 
-            // lbReceiveMsgs
-            // 
-            this.lbReceiveMsgs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.lbReceiveMsgs.FormattingEnabled = true;
-            this.lbReceiveMsgs.Location = new System.Drawing.Point(8, 19);
-            this.lbReceiveMsgs.Name = "lbReceiveMsgs";
-            this.lbReceiveMsgs.Size = new System.Drawing.Size(286, 225);
-            this.lbReceiveMsgs.TabIndex = 0;
             // 
             // gbxMsgOut
             // 
             this.gbxMsgOut.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbxMsgOut.Controls.Add(this.rtbMessages);
             this.gbxMsgOut.Controls.Add(this.btnSend);
             this.gbxMsgOut.Controls.Add(this.tbTransmitMsg);
-            this.gbxMsgOut.Controls.Add(this.lbSentMsgs);
-            this.gbxMsgOut.Location = new System.Drawing.Point(310, 3);
+            this.gbxMsgOut.Location = new System.Drawing.Point(12, 5);
             this.gbxMsgOut.MinimumSize = new System.Drawing.Size(300, 255);
             this.gbxMsgOut.Name = "gbxMsgOut";
             this.gbxMsgOut.Size = new System.Drawing.Size(300, 255);
             this.gbxMsgOut.TabIndex = 2;
             this.gbxMsgOut.TabStop = false;
-            this.gbxMsgOut.Text = "Messages Out:";
+            this.gbxMsgOut.Text = "Messages:";
             // 
             // btnSend
             // 
             this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSend.CausesValidation = false;
-            this.btnSend.Location = new System.Drawing.Point(246, 215);
+            this.btnSend.Location = new System.Drawing.Point(244, 215);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(48, 23);
             this.btnSend.TabIndex = 2;
@@ -114,21 +88,10 @@ namespace RSATerm
             this.tbTransmitMsg.Name = "tbTransmitMsg";
             this.tbTransmitMsg.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.tbTransmitMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbTransmitMsg.Size = new System.Drawing.Size(233, 38);
+            this.tbTransmitMsg.Size = new System.Drawing.Size(231, 38);
             this.tbTransmitMsg.TabIndex = 1;
             this.tbTransmitMsg.KeyDown +=tbTransmitMsg_KeyDown;
             this.tbTransmitMsg.KeyPress +=tbTransmitMsg_KeyPress;
-            // 
-            // lbSentMsgs
-            // 
-            this.lbSentMsgs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbSentMsgs.FormattingEnabled = true;
-            this.lbSentMsgs.Location = new System.Drawing.Point(6, 19);
-            this.lbSentMsgs.Name = "lbSentMsgs";
-            this.lbSentMsgs.Size = new System.Drawing.Size(288, 186);
-            this.lbSentMsgs.TabIndex = 0;
             // 
             // gbxConfig
             // 
@@ -136,7 +99,7 @@ namespace RSATerm
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbxConfig.Controls.Add(this.btnConfigRSA);
             this.gbxConfig.Controls.Add(this.btnConnect);
-            this.gbxConfig.Location = new System.Drawing.Point(613, 3);
+            this.gbxConfig.Location = new System.Drawing.Point(315, 5);
             this.gbxConfig.MinimumSize = new System.Drawing.Size(116, 255);
             this.gbxConfig.Name = "gbxConfig";
             this.gbxConfig.Size = new System.Drawing.Size(116, 255);
@@ -166,19 +129,31 @@ namespace RSATerm
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.button1_Click);
             // 
+            // rtbMessages
+            // 
+            this.rtbMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtbMessages.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.rtbMessages.Location = new System.Drawing.Point(7, 20);
+            this.rtbMessages.Name = "rtbMessages";
+            this.rtbMessages.ReadOnly = true;
+            this.rtbMessages.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.rtbMessages.Size = new System.Drawing.Size(288, 186);
+            this.rtbMessages.TabIndex = 3;
+            this.rtbMessages.Text = "";
+            // 
             // fHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(734, 285);
+            this.ClientSize = new System.Drawing.Size(444, 285);
             this.Controls.Add(this.gbxConfig);
             this.Controls.Add(this.gbxMsgOut);
-            this.Controls.Add(this.gbxMsgIn);
             this.Controls.Add(this.statusStrip1);
-            this.MinimumSize = new System.Drawing.Size(750, 323);
+            this.MinimumSize = new System.Drawing.Size(460, 323);
             this.Name = "fHome";
             this.Text = "RSATerm";
-            this.gbxMsgIn.ResumeLayout(false);
             this.gbxMsgOut.ResumeLayout(false);
             this.gbxMsgOut.PerformLayout();
             this.gbxConfig.ResumeLayout(false);
@@ -187,11 +162,40 @@ namespace RSATerm
 
         }
 
+        bool bLastPostLocalhost = false;
+        bool bLastPostRemotehost = false;
+
         void btnSend_Click(object sender, System.EventArgs e)
         {
             if (tbTransmitMsg.TextLength > 0)
             {
-                lbSentMsgs.Items.Add(tbTransmitMsg.Text);
+                //lbSentMsgs.Items.Add(tbTransmitMsg.Text);
+                //tbMessages.ForeColor = System.Drawing.Color.Blue;   //May change to allow color chooser?
+                //tbMessages.Text.Insert(tbMessages.TextLength, "\n\nLocalhost:> ");
+                //tbMessages.Text.Insert(tbMessages.TextLength, tbTransmitMsg.Text);
+                
+                int index = rtbMessages.TextLength;
+                if (bLastPostLocalhost)
+                {
+                    rtbMessages.AppendText("\n\n");
+                }
+                else
+                {
+                    if (bLastPostRemotehost)
+                    {
+                        rtbMessages.AppendText("\n\nLocalhost:> "); //Not the first item posted - need newlines
+                    }
+                    else
+                    {
+                        rtbMessages.AppendText("Localhost:> ");     //Must be the first item posted - no need for newlines.
+                    }
+                    bLastPostRemotehost = false;
+                    bLastPostLocalhost = true;
+                }
+                rtbMessages.AppendText(tbTransmitMsg.Text);
+                rtbMessages.Select(index, rtbMessages.TextLength - index);
+                rtbMessages.SelectionColor = System.Drawing.Color.Red;
+                rtbMessages.Select(rtbMessages.TextLength, 0);      //Clear the selection
                 tbTransmitMsg.Clear();
             }
             tbTransmitMsg.Focus();
@@ -226,15 +230,13 @@ namespace RSATerm
         #endregion
 
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.GroupBox gbxMsgIn;
         private System.Windows.Forms.GroupBox gbxMsgOut;
         private System.Windows.Forms.GroupBox gbxConfig;
         private System.Windows.Forms.Button btnConfigRSA;
         private System.Windows.Forms.Button btnConnect;
-        private System.Windows.Forms.ListBox lbReceiveMsgs;
-        private System.Windows.Forms.ListBox lbSentMsgs;
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.TextBox tbTransmitMsg;
+        private System.Windows.Forms.RichTextBox rtbMessages;
     }
 }
 
