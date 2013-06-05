@@ -30,14 +30,16 @@ namespace RSATerm
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.gbxMsgOut = new System.Windows.Forms.GroupBox();
+            this.rtbMessages = new System.Windows.Forms.RichTextBox();
             this.btnSend = new System.Windows.Forms.Button();
             this.tbTransmitMsg = new System.Windows.Forms.TextBox();
             this.gbxConfig = new System.Windows.Forms.GroupBox();
             this.btnConfigRSA = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
-            this.rtbMessages = new System.Windows.Forms.RichTextBox();
+            this.spIOPort = new System.IO.Ports.SerialPort(this.components);
             this.gbxMsgOut.SuspendLayout();
             this.gbxConfig.SuspendLayout();
             this.SuspendLayout();
@@ -66,6 +68,20 @@ namespace RSATerm
             this.gbxMsgOut.TabStop = false;
             this.gbxMsgOut.Text = "Messages:";
             // 
+            // rtbMessages
+            // 
+            this.rtbMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtbMessages.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.rtbMessages.Location = new System.Drawing.Point(7, 20);
+            this.rtbMessages.Name = "rtbMessages";
+            this.rtbMessages.ReadOnly = true;
+            this.rtbMessages.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.rtbMessages.Size = new System.Drawing.Size(288, 186);
+            this.rtbMessages.TabIndex = 3;
+            this.rtbMessages.Text = "";
+            // 
             // btnSend
             // 
             this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -76,7 +92,6 @@ namespace RSATerm
             this.btnSend.TabIndex = 2;
             this.btnSend.Text = "Send";
             this.btnSend.UseVisualStyleBackColor = true;
-            this.btnSend.Click +=btnSend_Click;
             // 
             // tbTransmitMsg
             // 
@@ -90,8 +105,6 @@ namespace RSATerm
             this.tbTransmitMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbTransmitMsg.Size = new System.Drawing.Size(231, 38);
             this.tbTransmitMsg.TabIndex = 1;
-            this.tbTransmitMsg.KeyDown +=tbTransmitMsg_KeyDown;
-            this.tbTransmitMsg.KeyPress +=tbTransmitMsg_KeyPress;
             // 
             // gbxConfig
             // 
@@ -128,20 +141,6 @@ namespace RSATerm
             this.btnConnect.Text = "Connection...";
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // rtbMessages
-            // 
-            this.rtbMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbMessages.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.rtbMessages.Location = new System.Drawing.Point(7, 20);
-            this.rtbMessages.Name = "rtbMessages";
-            this.rtbMessages.ReadOnly = true;
-            this.rtbMessages.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.rtbMessages.Size = new System.Drawing.Size(288, 186);
-            this.rtbMessages.TabIndex = 3;
-            this.rtbMessages.Text = "";
             // 
             // fHome
             // 
@@ -237,6 +236,7 @@ namespace RSATerm
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.TextBox tbTransmitMsg;
         private System.Windows.Forms.RichTextBox rtbMessages;
+        public System.IO.Ports.SerialPort spIOPort;
     }
 }
 

@@ -41,6 +41,7 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.btnSerialConfigOK = new System.Windows.Forms.Button();
             this.btnSerialConfigCancel = new System.Windows.Forms.Button();
+            this.serialTimeoutTimer = new System.Timers.Timer(1000);    //10-second timeout
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -57,11 +58,15 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(91, 13);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 1;
+            this.comboBox1.Click +=comboBox1_Click;
+            this.comboBox1.SelectionChangeCommitted +=comboBox1_SelectionChangeCommitted;
+
             // 
             // groupBox1
             // 
@@ -69,6 +74,7 @@
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.comboBox2);
+            this.groupBox1.Enabled = false;
             this.groupBox1.Location = new System.Drawing.Point(12, 45);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(285, 169);
@@ -154,7 +160,16 @@
             // 
             // comboBox2
             // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "2400 Baud",
+            "4800 Baud",
+            "9600 Baud",
+            "19200 Baud",
+            "38400 Baud",
+            "57600 Baud",
+            "115200 Baud"});
             this.comboBox2.Location = new System.Drawing.Point(101, 24);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(81, 21);
@@ -168,6 +183,7 @@
             this.btnSerialConfigOK.TabIndex = 3;
             this.btnSerialConfigOK.Text = "Connect";
             this.btnSerialConfigOK.UseVisualStyleBackColor = true;
+            this.btnSerialConfigOK.Click += btnSerialConfigOK_Click;
             // 
             // btnSerialConfigCancel
             // 
@@ -209,6 +225,135 @@
 
         }
 
+        
+
+
+        void btnSerialConfigOK_Click(object sender, System.EventArgs e)
+        {
+            //Here is where we make sure things work...
+            //Finalize the settings for the serial port:
+            char[] splitChars = {' '};
+            string sTemp = (comboBox2.SelectedItem.ToString()).Split(splitChars)[0];
+            tempPort.BaudRate = (System.Int32.Parse(sTemp));
+
+            if (rbFlowControlNone.Checked)
+            {
+                tempPort.RtsEnable = false;
+            }
+            else
+            {
+                tempPort.RtsEnable = true;
+            }
+
+            if (radioButton1.Checked)
+            {
+                tempPort.StopBits = System.IO.Ports.StopBits.One;
+            }
+            else
+            {
+                tempPort.StopBits = System.IO.Ports.StopBits.Two;
+            }
+
+            
+            groupBox1.Enabled = false;
+            comboBox1.Enabled = false;
+            btnSerialConfigCancel.Enabled = false;
+            btnSerialConfigOK.Enabled = false;
+            btnSerialConfigOK.Text = "Connecting...";
+            //This is where the ping test will happen:
+            tempPort.Open();
+            //Send the ping packet
+
+            //Wait for a response...
+            serialTimeoutTimer.Start();
+            while (!serialTimerDone && !serialDataReceived)
+            { }
+            if (serialDataReceived)     //We got something!
+            {
+                //Read the line and validate
+
+                //Stop and reset the timer
+                serialTimeoutTimer.Stop();
+                serialTimerDone = false;
+
+                //Reset the serial config objects
+                    //Actually, will leave greyed for now.  
+                //Pass the port back to the parent thread:
+                //...
+
+                //Pop success window and leave
+            }
+            else if (serialTimerDone)   //Connection timed out
+            {
+
+            }
+
+        }
+
+        void comboBox1_SelectionChangeCommitted(object sender, System.EventArgs e)
+        {
+            //There is a valid serial port selected!
+            //Populate the controls apropriately:
+            tempPort = new System.IO.Ports.SerialPort(comboBox1.SelectedItem.ToString());
+            //Update the baud rate selection box:
+            if(comboBox2.Items.Contains(tempPort.BaudRate.ToString() + " Baud"))
+            {
+                comboBox2.SelectedIndex = comboBox2.Items.IndexOf(tempPort.BaudRate.ToString() + " Baud");
+            }
+            else
+            {
+                comboBox2.Items.Add(tempPort.BaudRate.ToString() + " Baud");
+                comboBox2.SelectedIndex = comboBox2.Items.Count - 1;
+            }
+            comboBox2.Update();
+
+            //The flow control settings:
+            if (tempPort.RtsEnable)
+            {
+                rbFlowControlHardware.Checked = true;
+            }
+            else
+            {
+                rbFlowControlNone.Checked = true;
+            }
+
+            //The stop bit settings:
+            if (tempPort.StopBits == System.IO.Ports.StopBits.One)
+            {
+                radioButton1.Checked = true;    //1 stop bit
+            }
+            else
+            {
+                radioButton2.Checked = true;    //Two stop bits
+            }
+            
+
+            //Release the controls to the user:
+            groupBox1.Enabled = true;
+        }
+
+
+
+        void comboBox1_Click(object sender, System.EventArgs e)
+        {
+            comboBox1.BeginUpdate();
+            //Clear the combo box:
+            comboBox1.Items.Clear();
+
+            //Get the names of the available system serial ports:
+            foreach (string port in System.IO.Ports.SerialPort.GetPortNames())
+            {
+                //Insert the names into the list box:
+                comboBox1.Items.Add(port);
+            }
+            comboBox1.EndUpdate();
+        }
+
+        void comboBox2_Click(object sender, System.EventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
         #endregion
 
         private System.Windows.Forms.Label label1;
@@ -224,5 +369,9 @@
         private System.Windows.Forms.Button btnSerialConfigCancel;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
+        private System.IO.Ports.SerialPort tempPort;
+        private System.Timers.Timer serialTimeoutTimer;
+        private bool serialTimerDone = false;
+        private bool serialDataReceived = false;
     }
 }
