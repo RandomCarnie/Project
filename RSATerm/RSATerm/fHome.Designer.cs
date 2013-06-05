@@ -102,6 +102,7 @@ namespace RSATerm
             this.btnSend.TabIndex = 2;
             this.btnSend.Text = "Send";
             this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click +=btnSend_Click;
             // 
             // tbTransmitMsg
             // 
@@ -115,6 +116,8 @@ namespace RSATerm
             this.tbTransmitMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbTransmitMsg.Size = new System.Drawing.Size(233, 38);
             this.tbTransmitMsg.TabIndex = 1;
+            this.tbTransmitMsg.KeyDown +=tbTransmitMsg_KeyDown;
+            this.tbTransmitMsg.KeyPress +=tbTransmitMsg_KeyPress;
             // 
             // lbSentMsgs
             // 
@@ -174,7 +177,7 @@ namespace RSATerm
             this.Controls.Add(this.statusStrip1);
             this.MinimumSize = new System.Drawing.Size(750, 323);
             this.Name = "fHome";
-            this.Text = "Form1";
+            this.Text = "RSATerm";
             this.gbxMsgIn.ResumeLayout(false);
             this.gbxMsgOut.ResumeLayout(false);
             this.gbxMsgOut.PerformLayout();
