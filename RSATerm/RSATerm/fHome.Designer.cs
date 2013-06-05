@@ -92,6 +92,8 @@ namespace RSATerm
             this.btnSend.TabIndex = 2;
             this.btnSend.Text = "Send";
             this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click+=btnSend_Click;
+
             // 
             // tbTransmitMsg
             // 
@@ -105,6 +107,8 @@ namespace RSATerm
             this.tbTransmitMsg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbTransmitMsg.Size = new System.Drawing.Size(231, 38);
             this.tbTransmitMsg.TabIndex = 1;
+            this.tbTransmitMsg.KeyDown+=tbTransmitMsg_KeyDown;
+            this.tbTransmitMsg.KeyPress+=tbTransmitMsg_KeyPress;
             // 
             // gbxConfig
             // 
