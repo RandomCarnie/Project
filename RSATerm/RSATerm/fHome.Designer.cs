@@ -39,7 +39,6 @@ namespace RSATerm
             this.gbxConfig = new System.Windows.Forms.GroupBox();
             this.btnConfigRSA = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
-            this.spIOPort = new System.IO.Ports.SerialPort(this.components);
             this.gbxMsgOut.SuspendLayout();
             this.gbxConfig.SuspendLayout();
             this.SuspendLayout();
@@ -240,7 +239,7 @@ namespace RSATerm
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.TextBox tbTransmitMsg;
         private System.Windows.Forms.RichTextBox rtbMessages;
-        public System.IO.Ports.SerialPort spIOPort;
+        
     }
 }
 

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.m_Stack = new CommStack();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -184,6 +185,7 @@
             this.btnSerialConfigOK.Text = "Connect";
             this.btnSerialConfigOK.UseVisualStyleBackColor = true;
             this.btnSerialConfigOK.Click += btnSerialConfigOK_Click;
+            this.btnSerialConfigOK.Enabled = false;
             // 
             // btnSerialConfigCancel
             // 
@@ -223,9 +225,17 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
+            //
+            //CommStack
+            //
+            this.m_Stack.PingReceived += m_Stack_PingReceived;
+
         }
 
-        
+        void m_Stack_PingReceived(object sender, System.EventArgs e)
+        {
+
+        }
 
 
         void btnSerialConfigOK_Click(object sender, System.EventArgs e)
@@ -234,24 +244,24 @@
             //Finalize the settings for the serial port:
             char[] splitChars = {' '};
             string sTemp = (comboBox2.SelectedItem.ToString()).Split(splitChars)[0];
-            tempPort.BaudRate = (System.Int32.Parse(sTemp));
+            m_Stack.m_SerialClass.spIOPort.BaudRate = (System.Int32.Parse(sTemp));
 
             if (rbFlowControlNone.Checked)
             {
-                tempPort.RtsEnable = false;
+                m_Stack.m_SerialClass.spIOPort.RtsEnable = false;
             }
             else
             {
-                tempPort.RtsEnable = true;
+                m_Stack.m_SerialClass.spIOPort.RtsEnable = true;
             }
 
             if (radioButton1.Checked)
             {
-                tempPort.StopBits = System.IO.Ports.StopBits.One;
+                m_Stack.m_SerialClass.spIOPort.StopBits = System.IO.Ports.StopBits.One;
             }
             else
             {
-                tempPort.StopBits = System.IO.Ports.StopBits.Two;
+                m_Stack.m_SerialClass.spIOPort.StopBits = System.IO.Ports.StopBits.Two;
             }
 
             
@@ -261,10 +271,11 @@
             btnSerialConfigOK.Enabled = false;
             btnSerialConfigOK.Text = "Connecting...";
             //This is where the ping test will happen:
-            tempPort.Open();
+            m_Stack.m_SerialClass.spIOPort.Open();
             //Send the ping packet
 
             //Wait for a response...
+            serialTimeoutTimer = new System.Timers.Timer(200);  //1000 for release
             serialTimeoutTimer.Start();
             while (!serialTimerDone && !serialDataReceived)
             { }
@@ -278,14 +289,25 @@
 
                 //Reset the serial config objects
                     //Actually, will leave greyed for now.  
-                //Pass the port back to the parent thread:
-                //...
+                System.Windows.Forms.MessageBox.Show("Connection Established.", "Success!", System.Windows.Forms.MessageBoxButtons.OK);
+                groupBox1.Enabled = true;
+                comboBox1.Enabled = true;
+                btnSerialConfigCancel.Enabled = true;
+                btnSerialConfigOK.Enabled = true;
+                btnSerialConfigOK.ResetText();
 
-                //Pop success window and leave
+                this.AcceptButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             }
             else if (serialTimerDone)   //Connection timed out
             {
+                m_Stack.m_SerialClass.spIOPort.Close();
 
+                System.Windows.Forms.MessageBox.Show("Connection Failed.", "Error", System.Windows.Forms.MessageBoxButtons.OK);
+                groupBox1.Enabled = true;
+                comboBox1.Enabled = true;
+                btnSerialConfigCancel.Enabled = true;
+                btnSerialConfigOK.Enabled = true;
+                btnSerialConfigOK.ResetText();
             }
 
         }
@@ -294,21 +316,21 @@
         {
             //There is a valid serial port selected!
             //Populate the controls apropriately:
-            tempPort = new System.IO.Ports.SerialPort(comboBox1.SelectedItem.ToString());
+            m_Stack.m_SerialClass.spIOPort = new System.IO.Ports.SerialPort(comboBox1.SelectedItem.ToString());
             //Update the baud rate selection box:
-            if(comboBox2.Items.Contains(tempPort.BaudRate.ToString() + " Baud"))
+            if (comboBox2.Items.Contains(m_Stack.m_SerialClass.spIOPort.BaudRate.ToString() + " Baud"))
             {
-                comboBox2.SelectedIndex = comboBox2.Items.IndexOf(tempPort.BaudRate.ToString() + " Baud");
+                comboBox2.SelectedIndex = comboBox2.Items.IndexOf(m_Stack.m_SerialClass.spIOPort.BaudRate.ToString() + " Baud");
             }
             else
             {
-                comboBox2.Items.Add(tempPort.BaudRate.ToString() + " Baud");
+                comboBox2.Items.Add(m_Stack.m_SerialClass.spIOPort.BaudRate.ToString() + " Baud");
                 comboBox2.SelectedIndex = comboBox2.Items.Count - 1;
             }
             comboBox2.Update();
 
             //The flow control settings:
-            if (tempPort.RtsEnable)
+            if (m_Stack.m_SerialClass.spIOPort.RtsEnable)
             {
                 rbFlowControlHardware.Checked = true;
             }
@@ -318,7 +340,7 @@
             }
 
             //The stop bit settings:
-            if (tempPort.StopBits == System.IO.Ports.StopBits.One)
+            if (m_Stack.m_SerialClass.spIOPort.StopBits == System.IO.Ports.StopBits.One)
             {
                 radioButton1.Checked = true;    //1 stop bit
             }
@@ -330,6 +352,7 @@
 
             //Release the controls to the user:
             groupBox1.Enabled = true;
+            btnSerialConfigOK.Enabled = true;
         }
 
 
@@ -369,9 +392,9 @@
         private System.Windows.Forms.Button btnSerialConfigCancel;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
-        private System.IO.Ports.SerialPort tempPort;
         private System.Timers.Timer serialTimeoutTimer;
         private bool serialTimerDone = false;
         private bool serialDataReceived = false;
+        private CommStack m_Stack;
     }
 }

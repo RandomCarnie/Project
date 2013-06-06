@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommStack.cs" />
+    <Compile Include="Encryption.cs" />
     <Compile Include="fHome.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +66,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerialUtilities.cs" />
     <EmbeddedResource Include="fHome.resx">
       <DependentUpon>fHome.cs</DependentUpon>
     </EmbeddedResource>
